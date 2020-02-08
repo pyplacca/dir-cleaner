@@ -18,7 +18,7 @@ def get_extension(file):
 	basename = os.path.basename(file)
 	return basename.rsplit('.', 1)[-1]
 '''
-def check_existence(dirname, *basenames):
+def check_folder_existence(dirname, *basenames):
 	for name in basenames:
 		dir_ = os.path.join(dirname, name)
 		if os.path.exists(dir_):
@@ -89,12 +89,12 @@ def get_file_type(file):
 
 def clean(directory, file):
 	if os.path.isdir(os.path.join(directory, file)):
-			existing_directories[file.lower()] = 0
+			existing_directories[file.title()] = 0
 	else:
-		# identify what file we are dealing with
+		# identify file type
 		filetype = get_file_type(file)
 		# find out if a folder already exists for the given file
-		existence = check_existence(
+		existence = check_folder_existence(
 			filetype, filetype.lower(), filetype.upper()
 		)
 		if existence:
