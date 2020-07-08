@@ -1,4 +1,4 @@
 # dir-cleaner
 Directory cleaner
 
-A command line script for cleaning up pc directories.
+A CMD script for cleaning directories.
