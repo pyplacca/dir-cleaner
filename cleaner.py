@@ -1,6 +1,10 @@
 '''
-This script cleans up a directory or multiple directories and properly sorts out files in the given directory based of the filetype.
-Eg: All image file are moved to an existing or newly created "Pictures" folder, video files to the "Videos" folder, audio files to the "Audios" folder, etc.
+This script cleans up a directory or multiple directories and properly sorts
+out files in the given directory based of the filetype.
+
+Eg: All image files are moved to an existing or newly created "Images"
+	folder, video files to the "Videos" folder, audio files to the "Audios"
+	folder, etc.
 '''
 import os, sys
 import json, re
@@ -11,18 +15,15 @@ swd, *directories = sys.argv
 existing_directories = {}
 
 extensions = {}
-with open(os.path.join(os.path.dirname(swd), 'formats.json')) as file_formats:
-	file_formats = json.load(file_formats)
+json_file = os.path.join(os.path.dirname(swd), 'formats.json')
+with open(json_file) as formats:
+	file_formats = json.load(formats)
 	for fmt in file_formats:
-		extensions.update({ext: fmt for ext in file_formats[fmt]})
+		extensions.update({
+			ext.lower(): fmt for ext in file_formats[fmt]
+		})
 
 
-'''
-# intended for segmenting documents into subfolders for each filetype
-def get_extension(file):
-	basename = os.path.basename(file)
-	return basename.rsplit('.', 1)[-1]
-'''
 def check_folder_existence(dirname, *basenames):
 	for name in basenames:
 		dir_ = os.path.join(dirname, name)
@@ -39,13 +40,11 @@ def create_folder(where, name):
 def move_file(file, folder):
 	if '/' in folder:
 		folder = os.path.basename(folder)
+	filename = os.path.basename(file)
+	print(f'Moving {filename!r} to {folder}...')
 	os.rename(
 		file,
-		os.path.join(
-			os.path.dirname(file),
-			folder,
-			os.path.basename(file)
-		)
+		os.path.join(os.path.dirname(file), folder, filename)
 	)
 
 def get_file_type(file):
@@ -58,7 +57,9 @@ def get_file_type(file):
 		return type_
 
 def clean(directory, file):
-	if os.path.isdir(os.path.join(directory, file)):
+	file_path = os.path.join(directory, file)
+
+	if os.path.isdir(file_path):
 			existing_directories[file.title()] = 0
 	else:
 		# identify file type
@@ -75,11 +76,7 @@ def clean(directory, file):
 		if name not in existing_directories:
 			existing_directories[name] = dir_
 		# move file to its respective folder
-		print(f'Moving {file!r} to {os.path.basename(existing_directories[name])}...')
-		move_file(
-			os.path.join(directory, file),
-			existing_directories[name]
-		)
+		move_file(file_path, existing_directories[name])
 
 def scan_and_clean(directory):
 	# check files in given directory
@@ -87,7 +84,7 @@ def scan_and_clean(directory):
 
 	for file in files_to_clean:
 		clean(directory, file)
-		time.sleep(.1)
+		time.sleep(.13)
 
 
 if __name__ == "__main__":
