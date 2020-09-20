@@ -1,7 +1,7 @@
 # dir-cleaner
 Directory cleaner.
 
-A CMD script for cleaning directories.
+A CL script for cleaning directories.
 
 ## What it does
 This script cleans up a directory or multiple directories and properly sorts
@@ -15,7 +15,7 @@ out files in the given directory based on the file type.
 Before using this script, make sure you have [Python](https://python.org/downloads) installed on your PC.
 
 Now, assuming you have cloned this repository, and opened the CMD/Powershell window from the **dir-cleaner** folder, and would like to clean your desktop, run this command;
-```
+```shell
 python cleaner.py %USERPROFILE%/Desktop
 ```
 
